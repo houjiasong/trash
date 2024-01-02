@@ -3,8 +3,10 @@ package org.example;
 import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -47,7 +49,7 @@ public class TestFastJson {
     @Test
     public void learnStream() {
 //      初始化一个list
-        List<Integer> nums = Arrays.asList(1,2,3);
+        List<Integer> nums = Arrays.asList(1, 2, 3);
 //      打印list
 //        System.out.println(nums);
 //        System.out.println(nums.toString());
@@ -64,10 +66,10 @@ public class TestFastJson {
     @Test
     public void testCodeExecutionTime() {
         Long singleBeginTime = System.nanoTime();
-        int a[] = IntStream.range(0,1_000_000).filter(num -> num % 2 == 0).toArray();
+        int a[] = IntStream.range(0, 1_000_000).filter(num -> num % 2 == 0).toArray();
         Long singleEndTime = System.nanoTime();
         Long mutipleBeginTime = System.nanoTime();
-        int b[] = IntStream.range(0,1_000_000).parallel().filter(num -> num % 2 == 0).toArray();
+        int b[] = IntStream.range(0, 1_000_000).parallel().filter(num -> num % 2 == 0).toArray();
         Long mutipleEndTime = System.nanoTime();
         Long singleTime = singleEndTime - singleBeginTime;
         Long mutipleTime = mutipleEndTime - mutipleBeginTime;
@@ -75,10 +77,27 @@ public class TestFastJson {
         System.out.println("singleTime = " + singleTime);
         System.out.println("mutipleTime = " + mutipleTime);
         System.out.println("gap = " + gap);
-
-
-
-
     }
 
+    @Test
+    public void testIsEmptyAndNull() {
+//      测试一下isEmpty和==null判空的区别
+        List<String> strings= new ArrayList<>();
+        String str1 = null;
+        String str2 = "";
+        String str3 = "hhh";
+        String str4 = "xxx";
+        strings.add(str1);
+        strings.add(str2);
+        strings.add(str3);
+        strings.add(str4);
+
+//        Optional.ofNullable(str).ifPresent(System.out::println);
+        for (String s: strings) {
+            if (Optional.ofNullable(s).filter(String::isEmpty).orElse(null) == null) continue;
+            else System.out.println(s);
+        }
+        return;
+//      为空的时候判断为失效，所以得用isEmpty
+    }
 }
